@@ -1,27 +1,66 @@
-class Key {
-    usChar;
-    ruChar;
-constructor (usChar, ruChar) {
+let text = "";
+let upperChar = false;
+
+class BasicKey {
+constructor (usChar, ruChar, className, upChar) {
     this.usChar = usChar;
     this.ruChar = ruChar;
+    this.className = className;
+    this.upChar = upChar;
 }
     onClick(text) {
         text+=this.usChar;
         return text;
     }
-}
+};
 
-const keys = [new Key("`", "ё"), new Key("1", "1"), new Key("2", "2"), new Key("3", "3"), new Key("4", "4"), new Key("5", "5"),
-              new Key("6", "6"), new Key("7", "7"), new Key("8", "8"), new Key("9", "9"), new Key("0", "0"), new Key("-", "-"),
-              new Key("=", "="), new Key("Back", "Back"), new Key("Tab", "Tab"), new Key("q", "й"), new Key("w", "ц"), new Key("e", "у"),
-              new Key("r", "к"), new Key("t", "е"), new Key("y", "н"), new Key("u", "г"), new Key("i", "ш"), new Key("p", "з"),
-              new Key("[", "х"), new Key("]", "ъ"), new Key("\\", "\\"), new Key("Caps", "Caps"), new Key("a", "ф"), new Key("s", "ы"),
-              new Key("d", "в"), new Key("f", "а"), new Key("g", "п"), new Key("h", "р"), new Key("j", "о"), new Key("k", "л"),
-              new Key("l", "д"), new Key(";", "ж"), new Key("'", "э"), new Key("En", "En"), new Key("Sh", "Sh"), new Key("z", "я"),
-              new Key("x", "ч"), new Key("c", "с"), new Key("v", "м"), new Key("b", "и"), new Key("n", "т"), new Key("m", "ь"),
-              new Key(",", "б"), new Key(".", "ю"), new Key("/", "."), new Key("Sh", "Sh"), new Key("Ctr", "Ctr"), new Key("Win", "Win"),
-              new Key("a", "ф"), new Key("s", "ы"), new Key("d", "в"), new Key("a", "ф"), new Key("s", "ы"), new Key("d", "в"),
-              new Key("Alt", "Alt"), new Key("Space", "Space"), new Key("Alt", "Alt"), new Key("Win", "Win"), new Key("Ctr", "Ctr")];
+class CapsKey extends BasicKey  {
+    
+    
+    onClick = function () {
+        let capsButton = document.querySelector(".caps-button");
+        let arrButton = document.querySelectorAll(".button");
+        if (upperChar == false) {
+            
+            for (let i = 0; i < arrButton.length; i++) {
+                arrButton[i].innerHTML = arrButton[i].innerHTML.toUpperCase();
+            };
+
+            for (let i = 0; i < keys.length; i++) {
+                if (keys[i].className == "button") {
+                    keys[i].usChar = keys[i].usChar.toUpperCase();
+                    upperChar = true;
+                    capsButton.classList.add("caps-active");
+                }
+            }
+        }  
+        else {
+            for (let i = 0; i < arrButton.length; i++) {
+                arrButton[i].innerHTML = arrButton[i].innerHTML.toLowerCase();
+            };
+
+            for (let i = 0; i < keys.length; i++) {
+            keys[i].usChar = keys[i].usChar.toLowerCase();
+            upperChar = false;
+            capsButton.classList.remove("caps-active");
+            } 
+            
+        }    
+        return text;
+    };
+};
+
+
+const keys = [new BasicKey("`", "ё","button",false), new BasicKey("1", "1", "button",false), new BasicKey("2", "2", "button",false), new BasicKey("3", "3","button",false), new BasicKey("4", "4","button",false), new BasicKey("5", "5","button",false),
+              new BasicKey("6", "6","button",false), new BasicKey("7", "7", "button",false), new BasicKey("8", "8", "button",false), new BasicKey("9", "9","button",false), new BasicKey("0", "0","button"), new BasicKey("-", "-","button"),
+              new BasicKey("=", "=","button",false), new BasicKey("Back", "Back", "function-button"), new BasicKey("Tab", "Tab", "tab-button"), new BasicKey("q", "й","button",false), new BasicKey("w", "ц","button"), new BasicKey("e", "у","button"),
+              new BasicKey("r", "к","button",false), new BasicKey("t", "е", "button"), new BasicKey("y", "н", "button",false), new BasicKey("u", "г","button"), new BasicKey("i", "ш","button"), new BasicKey("o", "щ","button"), new BasicKey("p", "з", "button"),
+              new BasicKey("[", "х","button",false), new BasicKey("]", "ъ", "button",false), new BasicKey("\\", "\\", "button",false), new BasicKey("Del", "Del", "dell-button"), new CapsKey("Caps", "Caps","caps-button"), new BasicKey("a", "ф","button"), new BasicKey("s", "ы","button"),
+              new BasicKey("d", "в","button",false), new BasicKey("f", "а", "button",false), new BasicKey("g", "п", "button",false), new BasicKey("h", "р","button"), new BasicKey("j", "о", "button"), new BasicKey("k", "л", "button"),
+              new BasicKey("l", "д","button",false), new BasicKey(";", "ж", "button",false), new BasicKey("'", "э", "button",false), new BasicKey("Enter", "Enter","function-button"), new BasicKey("Shift", "Shift","function-button"), new BasicKey("z", "я","button"),
+              new BasicKey("x", "ч","button",false), new BasicKey("c", "с", "button",false), new BasicKey("v", "м", "button",false), new BasicKey("b", "и","button"), new BasicKey("n", "т","button"), new BasicKey("m", "ь","button"),
+              new BasicKey(",", "б","button",false), new BasicKey(".", "ю", "button",false), new BasicKey("/", ".", "button",false), new BasicKey("▲", "▲","button"), new BasicKey("Shift", "Shift","function-button"), new BasicKey("Ctr", "Ctr","ctrl-alt-button"), new BasicKey("Win", "Win","win-button"),
+              new BasicKey("Alt", "Alt","ctrl-alt-button"), new BasicKey(" ", " ", "space-button"), new BasicKey("Alt", "Alt", "ctrl-alt-button"), new BasicKey("◄", "◄","button"), new BasicKey("▼", "▼","button"), new BasicKey("▼", "▼","button"), new BasicKey("Ctr", "Ctr","ctrl-alt-button")];
 
 const keyboard = document.createElement("div");
 const textArea = document.createElement("textarea")
@@ -34,17 +73,16 @@ keyboard.className = ("keyboard");
 body.append(keyboard);
 
 
-let text = "";
-
 
 for (let i = 0; i < keys.length; i++) {
     let button = document.createElement("div");
-    button.className = ("button");
-    button.innerHTML = (`${keys[i].usChar}`)
+    button.className = (`${keys[i].className}`);
+    button.innerHTML = (`${keys[i].usChar}`);
     keyboard.append(button);
     button.addEventListener("click", () => {
-        text = keys[i].onClick(text)
+        text = keys[i].onClick(text);
         textArea.innerHTML = text;
     });
 
 }
+
