@@ -77,6 +77,10 @@
     border-radius: 10px;
     background-color: rgba(253, 114, 0, 0.925);
 }
+.space-button:hover{
+    cursor: pointer;
+    transform: scale(1.01);
+}
 .caps-button:hover,
 .dell-button:hover,
 .win-button:hover,
