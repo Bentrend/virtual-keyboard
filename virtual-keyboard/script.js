@@ -1,6 +1,6 @@
 let text = "";
 let upperChar = false;
-
+let position;
 class BasicKey {
 constructor (usChar, ruChar, className, upChar) {
     this.usChar = usChar;
@@ -10,6 +10,7 @@ constructor (usChar, ruChar, className, upChar) {
 }
     onClick(text) {
         text+=this.usChar;
+        position = text.length;
         return text;
     }
 };
@@ -50,19 +51,22 @@ class CapsKey extends BasicKey  {
 
 class BackspaceKey extends BasicKey {  
     onClick = function (text) {
+        
         let textArea = document.querySelector(".text-area");
-
+        
         if (text.length == 0) {
             return text;
         }; 
 
-        if (textArea.selectionEnd > 0) {
+        if (textArea.selectionStart > 0) {
+            console.log("test");
             
-        return textArea.innerHTML.slice(0, textArea.selectionEnd-1) + textArea.innerHTML.slice(textArea.selectionEnd);
+            let result = textArea.innerHTML.slice(0, textArea.selectionEnd-1) + textArea.innerHTML.slice(textArea.selectionEnd);
+            position = textArea.selectionEnd-1;
+        return result;
         }
 
         else {
-
             let arr = text.split("");
             arr.length = arr.length -1;    
             return arr.join("");
@@ -75,8 +79,9 @@ class DelKey extends BasicKey {
     onClick = function (text) {
         let textArea = document.querySelector(".text-area");
         let result = textArea.innerHTML.slice(0, textArea.selectionEnd-1) + textArea.innerHTML.slice(textArea.selectionEnd);
-        textArea.setSelectionRange(textArea.selectionEnd, textArea.selectionEnd);
+            position = textArea.selectionEnd-1;
         return result;
+        
     }
 }
 class EnterKey extends BasicKey {
@@ -108,7 +113,7 @@ const textArea = document.createElement("textarea")
 const body = document.querySelector("body");
 
 textArea.className = ("text-area");
-textArea.focus();
+
 body.append(textArea);
 
 keyboard.className = ("keyboard");
@@ -124,6 +129,11 @@ for (let i = 0; i < keys.length; i++) {
     button.addEventListener("click", () => {
         text = keys[i].onClick(text);
         textArea.innerHTML = text;
+        // textArea.selectionStart = textArea.selectionEnd = textArea.innerHTML[textArea.innerHTML.length - textArea.selectionStart]
+        // textArea.focus();
+        textArea.selectionStart = textArea.selectionEnd = position;
+        console.log(position);
+        textArea.focus();
     });
 
 }
