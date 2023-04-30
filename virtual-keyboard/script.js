@@ -87,6 +87,7 @@ class DelKey extends BasicKey {
 class EnterKey extends BasicKey {
     onClick = function (text) {
         text+="\n";
+        position = text.length;
         return text;
     }
 }
