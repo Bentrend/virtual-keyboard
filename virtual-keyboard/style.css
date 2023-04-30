@@ -112,3 +112,9 @@
     background-color: rgba(253, 114, 0, 0.541);
     transform: scale(1);
 }
+.text-area:focus {
+    outline-style: none;
+}
+* {
+    user-select: none;
+}
