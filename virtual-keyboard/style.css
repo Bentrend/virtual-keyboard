@@ -26,8 +26,7 @@
 }
 
 .button,
-.dell-button,
-.win-button {
+.dell-button {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -35,6 +34,19 @@
     height: 40px;
     border-radius: 10px;
     background-color: rgba(253, 114, 0, 0.925);
+}
+
+.lang-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: rgba(253, 114, 0, 0.925);
+    background-image: url(./icon/icon-globe.png);
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .function-button,
@@ -81,6 +93,7 @@
     cursor: pointer;
     transform: scale(1.01);
 }
+.lang-button:hover,
 .caps-button:hover,
 .dell-button:hover,
 .win-button:hover,
@@ -103,7 +116,7 @@
     background-color: rgba(253, 114, 0, 0.541);
     transform: scale(1.1);
 }
-.win-button:active,
+.lang-button:active,
 .dell-button:active,
 .space-button:active,
 .ctrl-alt-button:active,
