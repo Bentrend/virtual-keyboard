@@ -173,7 +173,7 @@ document.addEventListener("keyup", (event) => {
    
    let pressKey = keyMap.get(event.code);
    textArea.focus();
-   pressKey.onClick(textArea, keyboardLang, upperChar);
+   //pressKey.onClick(textArea, keyboardLang, upperChar);
    
 })
 
