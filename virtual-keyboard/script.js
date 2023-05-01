@@ -1,8 +1,6 @@
+localStorage['keyboardLang'];
 let upperChar = false;
-let keyboardLang = "eng";
 let keyMap = new Map();
-
-
 
 class BasicKey {
 constructor (usChar, ruChar, className, keyCode) {
@@ -11,10 +9,9 @@ constructor (usChar, ruChar, className, keyCode) {
     this.className = className;
     this.keyCode = keyCode;
 }
-    onClick(textArea, keyboardLang, upperChar) {
-        
+    onClick(textArea, upperChar) {
         let position = textArea.selectionStart;
-        let currentChar = keyboardLang === "eng" ? this.usChar : this.ruChar;
+        let currentChar = localStorage['keyboardLang'] === "eng" ? this.usChar : this.ruChar;
         currentChar = upperChar ? currentChar.toUpperCase() : currentChar.toLowerCase();
         textArea.value = textArea.value.slice(0, textArea.selectionStart) + currentChar + textArea.value.slice(textArea.selectionEnd) ;
         position++;
@@ -94,18 +91,19 @@ class DelKey extends BasicKey {
 }
 class EnterKey extends BasicKey {
     onClick = function (textArea) {
-        textArea.innerHTML += "\n";
-        textArea.selectionStart = textArea.innerHTML.length;
+        textArea.value = textArea.value.slice(0, textArea.selectionStart) + "\n" + textArea.value.slice(textArea.selectionEnd) ;
+        textArea.selectionStart = textArea.value.length;
         textArea.focus();
     }
 }
 
 class TabKey extends BasicKey {
     onClick(textArea) {
-        
-
-        textArea.innerHTML += "    ";
-        textArea.selectionStart = textArea.innerHTML.length;
+        let position = textArea.selectionStart;
+        textArea.value = textArea.value.slice(0, textArea.selectionStart) + "    " + textArea.value.slice(textArea.selectionEnd) ;
+        position+=4;
+        textArea.selectionEnd = position;
+        textArea.selectionStart = position;
         textArea.focus();
     }
 }
@@ -113,7 +111,7 @@ class TabKey extends BasicKey {
 class LangKey extends BasicKey {
     onClick = function () {
         let buttons = document.querySelectorAll('[class$="button"]');
-        if (keyboardLang === "eng") {
+        if (localStorage['keyboardLang'] === "eng") {
     
             for (let i = 0; i <keys.length; i++) {
                 if (keys[i].className === "button") {
@@ -125,11 +123,11 @@ class LangKey extends BasicKey {
                     }
                 }
             }
-            keyboardLang = "ru";
+            localStorage['keyboardLang'] = "ru";
             return;
         }
 
-        if (keyboardLang === "ru") {
+        if (localStorage['keyboardLang'] === "ru") {
         
             for (let i = 0; i <keys.length; i++) {
                 if (keys[i].className === "button") {
@@ -141,7 +139,7 @@ class LangKey extends BasicKey {
                     }
                 }
             }
-            keyboardLang = "eng";
+            localStorage['keyboardLang'] = "eng";
             return;
         }
     }
@@ -179,13 +177,30 @@ document.addEventListener("keyup", (event) => {
    
 })
 
-for (let i = 0; i < keys.length; i++) {
-    let button = document.createElement("div");
-    button.className = (`${keys[i].className}`);
-    button.innerHTML = (`${keys[i].usChar}`);
-    keyboard.append(button);
-    button.addEventListener("click", () => keys[i].onClick(textArea, keyboardLang, upperChar) );
-    
-    keyMap.set(keys[i].keyCode, keys[i]);
-}
 
+
+if (localStorage['keyboardLang'] === "eng") {
+    textArea.focus();
+    for (let i = 0; i < keys.length; i++) {
+        let button = document.createElement("div");
+        button.className = (`${keys[i].className}`);
+        button.innerHTML = (`${keys[i].usChar}`);
+        keyboard.append(button);
+        button.addEventListener("click", () => keys[i].onClick(textArea,  upperChar) );
+        
+        keyMap.set(keys[i].keyCode, keys[i]);
+    };
+};
+
+if (localStorage['keyboardLang'] === "ru") {
+    textArea.focus();
+    for (let i = 0; i < keys.length; i++) {
+        let button = document.createElement("div");
+        button.className = (`${keys[i].className}`);
+        button.innerHTML = (`${keys[i].ruChar}`);
+        keyboard.append(button);
+        button.addEventListener("click", () => keys[i].onClick(textArea, upperChar) );
+    
+        keyMap.set(keys[i].keyCode, keys[i]);
+    };
+};
