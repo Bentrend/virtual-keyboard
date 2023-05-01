@@ -1,6 +1,8 @@
-let text = "";
 let upperChar = false;
+let keyboardLang = "eng";
 let position;
+
+
 class BasicKey {
 constructor (usChar, ruChar, className, upChar) {
     this.usChar = usChar;
@@ -8,10 +10,20 @@ constructor (usChar, ruChar, className, upChar) {
     this.className = className;
     this.upChar = upChar;
 }
-    onClick(text) {
-        text+=this.usChar;
-        position = text.length;
-        return text;
+    onClick(textArea, keyboardLang, upperChar) {
+
+        console.log(keyboardLang);
+        console.log(upperChar);
+
+        let currentChar = keyboardLang === "eng" ? this.usChar : this.ruChar;
+
+        currentChar = upperChar ? currentChar.toUpperCase() : currentChar.toLowerCase();
+
+        console.log(currentChar);
+
+        textArea.innerHTML += currentChar;
+        textArea.selectionStart = textArea.innerHTML.length;
+        textArea.focus();
     }
 };
 
@@ -24,77 +36,89 @@ class CapsKey extends BasicKey  {
             for (let i = 0; i < arrButton.length; i++) {
                 arrButton[i].innerHTML = arrButton[i].innerHTML.toUpperCase();
             };
-
-            for (let i = 0; i < keys.length; i++) {
-                if (keys[i].className == "button") {
-                    keys[i].usChar = keys[i].usChar.toUpperCase();
-                    upperChar = true;
-                    capsButton.classList.add("caps-active");
-                }
-            }
+            upperChar = true;
+            capsButton.classList.add("caps-active");
+        
         }  
         else {
             for (let i = 0; i < arrButton.length; i++) {
                 arrButton[i].innerHTML = arrButton[i].innerHTML.toLowerCase();
             };
-
-            for (let i = 0; i < keys.length; i++) {
-            keys[i].usChar = keys[i].usChar.toLowerCase();
+            capsButton.classList.remove("caps-active"); 
             upperChar = false;
-            capsButton.classList.remove("caps-active");
-            } 
-            
         }    
-        return text;
     };
 };
 
 class BackspaceKey extends BasicKey {  
-    onClick = function (text) {
-        
-        let textArea = document.querySelector(".text-area");
-        
-        if (text.length == 0) {
-            return text;
+    onClick = function (textArea) {
+        if (textArea.innerHTML.length == 0) {
+            return;
         }; 
-
         if (textArea.selectionStart > 0) {
-            console.log("test");
-            
-            let result = textArea.innerHTML.slice(0, textArea.selectionEnd-1) + textArea.innerHTML.slice(textArea.selectionEnd);
-            position = textArea.selectionEnd-1;
-        return result;
-        }
-
-        else {
-            let arr = text.split("");
-            arr.length = arr.length -1;    
-            return arr.join("");
+            position = textArea.selectionStart-1;
+            textArea.innerHTML = textArea.innerHTML.slice(0, textArea.selectionEnd-1) + textArea.innerHTML.slice(textArea.selectionEnd);
+            textArea.selectionStart = position;
+            textArea.focus();
+        return;
         }
 
         }      
     }
 
 class DelKey extends BasicKey {
-    onClick = function (text) {
-        let textArea = document.querySelector(".text-area");
-        let result = textArea.innerHTML.slice(0, textArea.selectionEnd-1) + textArea.innerHTML.slice(textArea.selectionEnd);
-            position = textArea.selectionEnd-1;
-        return result;
+     onClick = function (textArea) {
+        if (textArea.innerHTML.length == 0) {
+            return;
+        }; 
+        if (textArea.selectionStart > 0) {
+            position = textArea.selectionStart;
+            textArea.innerHTML = textArea.innerHTML.slice(0, textArea.selectionEnd) + textArea.innerHTML.slice(textArea.selectionEnd+1);
+            textArea.selectionStart = position;
+            textArea.focus();
+        return;
+        }
         
-    }
+        }      
 }
 class EnterKey extends BasicKey {
-    onClick = function (text) {
-        text+="\n";
-        position = text.length;
-        return text;
+    onClick = function (textArea) {
+        textArea.innerHTML += "\n";
+        textArea.selectionStart = textArea.innerHTML.length;
+        textArea.focus();
     }
 }
 
 class TabKey extends BasicKey {
     onClick = function () {
-        return text;
+    
+    }
+}
+
+class LangKey extends BasicKey {
+    onClick = function () {
+        let buttons = document.querySelectorAll('[class$="button"]');
+        if (keyboardLang === "eng") {
+        
+            for (let i = 0; i <keys.length; i++) {
+                if (keys[i].className === "button") {
+                    buttons[i].innerHTML = (`${keys[i].ruChar}`); 
+                }
+            }
+            keyboardLang = "ru";
+            return;
+        }
+
+        if (keyboardLang === "ru") {
+        
+            for (let i = 0; i <keys.length; i++) {
+                if (keys[i].className === "button") {
+                    buttons[i].innerHTML = (`${keys[i].usChar}`);
+                }
+            }
+            keyboardLang = "eng";
+            return;
+        }
     }
 }
 
@@ -106,8 +130,8 @@ const keys = [new BasicKey("`", "ё","button",false), new BasicKey("1", "1", "bu
               new BasicKey("d", "в","button",false), new BasicKey("f", "а", "button",false), new BasicKey("g", "п", "button",false), new BasicKey("h", "р","button"), new BasicKey("j", "о", "button"), new BasicKey("k", "л", "button"),
               new BasicKey("l", "д","button",false), new BasicKey(";", "ж", "button",false), new BasicKey("'", "э", "button",false), new EnterKey("Enter", "Enter","function-button"), new BasicKey("Shift", "Shift","function-button"), new BasicKey("z", "я","button"),
               new BasicKey("x", "ч","button",false), new BasicKey("c", "с", "button",false), new BasicKey("v", "м", "button",false), new BasicKey("b", "и","button"), new BasicKey("n", "т","button"), new BasicKey("m", "ь","button"),
-              new BasicKey(",", "б","button",false), new BasicKey(".", "ю", "button",false), new BasicKey("/", ".", "button",false), new BasicKey("▲", "▲","button"), new BasicKey("Shift", "Shift","function-button"), new BasicKey("Ctr", "Ctr","ctrl-alt-button"), new BasicKey("Win", "Win","win-button"),
-              new BasicKey("Alt", "Alt","ctrl-alt-button"), new BasicKey(" ", " ", "space-button"), new BasicKey("Alt", "Alt", "ctrl-alt-button"), new BasicKey("◄", "◄","button"), new BasicKey("▼", "▼","button"), new BasicKey("▼", "▼","button"), new BasicKey("Ctr", "Ctr","ctrl-alt-button")];
+              new BasicKey(",", "б","button",false), new BasicKey(".", "ю", "button",false), new BasicKey("/", ".", "button",false), new BasicKey("▲", "▲","button"), new BasicKey("Shift", "Shift","function-button"), new BasicKey("Ctr", "Ctr","ctrl-alt-button"), new LangKey("", "","lang-button"),
+              new BasicKey("Alt", "Alt","ctrl-alt-button"), new BasicKey(" ", " ", "space-button"), new BasicKey("Alt", "Alt", "ctrl-alt-button"), new BasicKey("◄", "◄","button"), new BasicKey("▼", "▼","button"), new BasicKey("►", "►","button"), new BasicKey("Ctr", "Ctr","ctrl-alt-button")];
 
 const keyboard = document.createElement("div");
 const textArea = document.createElement("textarea")
@@ -127,15 +151,7 @@ for (let i = 0; i < keys.length; i++) {
     button.className = (`${keys[i].className}`);
     button.innerHTML = (`${keys[i].usChar}`);
     keyboard.append(button);
-    button.addEventListener("click", () => {
-        text = keys[i].onClick(text);
-        textArea.innerHTML = text;
-        // textArea.selectionStart = textArea.selectionEnd = textArea.innerHTML[textArea.innerHTML.length - textArea.selectionStart]
-        // textArea.focus();
-        textArea.selectionStart = textArea.selectionEnd = position;
-        console.log(position);
-        textArea.focus();
-    });
+    button.addEventListener("click", () => keys[i].onClick(textArea, keyboardLang, upperChar) );
 
 }
 
