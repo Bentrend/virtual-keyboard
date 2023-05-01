@@ -1,4 +1,5 @@
 .text-area {
+    overflow-wrap: break-all;
     display: block;
     position: relative;
     top: 10px;
@@ -118,6 +119,7 @@
     background-color: rgba(253, 114, 0, 0.541);
     transform: scale(1.1);
 }
+.tab-button:active,
 .lang-button:active,
 .dell-button:active,
 .space-button:active,

@@ -1,6 +1,5 @@
 let upperChar = false;
 let keyboardLang = "eng";
-let position;
 
 
 class BasicKey {
@@ -10,12 +9,14 @@ constructor (usChar, ruChar, className, upChar) {
     this.className = className;
 }
     onClick(textArea, keyboardLang, upperChar) {
+        let position = textArea.selectionStart;
         let currentChar = keyboardLang === "eng" ? this.usChar : this.ruChar;
-
         currentChar = upperChar ? currentChar.toUpperCase() : currentChar.toLowerCase();
-
-        textArea.innerHTML += currentChar;
-        textArea.selectionStart = textArea.innerHTML.length;
+        textArea.innerHTML = textArea.innerHTML.slice(0, position) + currentChar + textArea.innerHTML.slice(position) ;
+        console.log(position);
+        position++;
+        textArea.selectionStart = position;
+       
         textArea.focus();
     }
 };
@@ -45,32 +46,45 @@ class CapsKey extends BasicKey  {
 
 class BackspaceKey extends BasicKey {  
     onClick = function (textArea) {
-        if (textArea.innerHTML.length == 0) {
-            return;
-        }; 
-        if (textArea.selectionStart > 0) {
-            position = textArea.selectionStart-1;
-            textArea.innerHTML = textArea.innerHTML.slice(0, textArea.selectionEnd-1) + textArea.innerHTML.slice(textArea.selectionEnd);
-            textArea.selectionStart = position;
-            textArea.focus();
-        return;
-        }
-
+        let position = textArea.selectionStart;
+            if (textArea.innerHTML.length == 0) {
+                return;
+            }; 
+            if (textArea.selectionStart == textArea.selectionEnd) {
+                textArea.innerHTML = textArea.innerHTML.slice(0, textArea.selectionStart-1) + textArea.innerHTML.slice(textArea.selectionStart);
+                textArea.selectionStart = position-1;
+                textArea.focus();
+                return;
+            }
+            else {
+                textArea.innerHTML = textArea.innerHTML.slice(0, textArea.selectionStart) + textArea.innerHTML.slice(textArea.selectionEnd);
+                console.log(position);
+                textArea.selectionStart = position;
+                textArea.focus();
+                return;
+            }
         }      
     }
 
 class DelKey extends BasicKey {
      onClick = function (textArea) {
-        if (textArea.innerHTML.length == 0) {
-            return;
-        }; 
-        if (textArea.selectionStart > 0) {
-            position = textArea.selectionStart;
-            textArea.innerHTML = textArea.innerHTML.slice(0, textArea.selectionEnd) + textArea.innerHTML.slice(textArea.selectionEnd+1);
-            textArea.selectionStart = position;
-            textArea.focus();
-        return;
-        }
+        let position = textArea.selectionStart;
+            if (textArea.innerHTML.length == 0) {
+                return;
+            }; 
+            if (textArea.selectionStart == textArea.selectionEnd) {
+                let position = textArea.selectionStart;
+                textArea.innerHTML = textArea.innerHTML.slice(0, textArea.selectionEnd) + textArea.innerHTML.slice(textArea.selectionEnd+1);
+                textArea.selectionStart = position;
+                textArea.focus();
+                return;
+            }
+            else {
+                textArea.innerHTML = textArea.innerHTML.slice(0, textArea.selectionStart) + textArea.innerHTML.slice(textArea.selectionEnd);
+                textArea.selectionStart = position;
+                textArea.focus();
+                return;
+            }
         
         }      
 }
@@ -83,8 +97,12 @@ class EnterKey extends BasicKey {
 }
 
 class TabKey extends BasicKey {
-    onClick = function () {
-    
+    onClick(textArea) {
+        
+
+        textArea.innerHTML += "    ";
+        textArea.selectionStart = textArea.innerHTML.length;
+        textArea.focus();
     }
 }
 
