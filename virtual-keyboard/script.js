@@ -50,7 +50,7 @@ class BackspaceKey extends BasicKey {
             if (textArea.value.length == 0) {
                 return;
             }; 
-            if (textArea.selectionStart == textArea.selectionEnd) {
+            if (textArea.selectionStart == textArea.selectionEnd && textArea.selectionStart != 0) {
                 textArea.value = textArea.value.slice(0, textArea.selectionStart-1) + textArea.value.slice(textArea.selectionStart);
                 textArea.selectionEnd = position-1;
                 textArea.focus();
