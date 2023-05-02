@@ -325,7 +325,9 @@ if (localStorage.getItem("keyboardLang") === null) {
         else if (keys[i].usChar === "=") {
             button.setAttribute("data", "Equal");
         }
-    
+        else if (keys[i].usChar === "Del") {
+            button.setAttribute("data", "Delete");
+        }
         else {
             button.setAttribute("data", keys[i].usChar.toUpperCase())
         }
