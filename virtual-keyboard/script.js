@@ -158,6 +158,9 @@ const keys = [new BasicKey("`", "ё","button"), new BasicKey("1", "1", "button")
 const keyboard = document.createElement("div");
 const textArea = document.createElement("textarea")
 const body = document.querySelector("body");
+const title = document.createElement("div");
+title.className = "title"
+title.innerHTML = "Для переключения языка используйте только кнопку на вируальной клавиатуре. Многиe функции в процессе разработки и еще не доступны:("
 
 textArea.className = ("text-area");
 textArea.selectionStart = 0;
@@ -166,6 +169,7 @@ body.append(textArea);
 
 keyboard.className = ("keyboard");
 body.append(keyboard);
+body.append(title);
 
 document.addEventListener("keyup", (event) => {
 
