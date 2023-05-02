@@ -114,42 +114,42 @@ class TabKey extends BasicKey {
 }
 
 let langFunction = function () {
-    let buttons = document.querySelectorAll('[class$="button"]');
-    if (localStorage.getItem("keyboardLang") === "eng") {
-
-        for (let i = 0; i <keys.length; i++) {
-            if (keys[i].className === "button") {
-                if (upperChar){
-                buttons[i].innerHTML = (`${keys[i].ruChar.toUpperCase()}`);
-                }
-                else {
-                    buttons[i].innerHTML = (`${keys[i].ruChar}`);
-                }
-            }
-        }
-        localStorage.setItem("keyboardLang", "ru");
-        return;
-    }
-
-    if (localStorage.getItem("keyboardLang") === "ru") {
-    
-        for (let i = 0; i <keys.length; i++) {
-            if (keys[i].className === "button") {
-                if (upperChar){
-                buttons[i].innerHTML = (`${keys[i].usChar.toUpperCase()}`);
-                }
-                else {
-                    buttons[i].innerHTML = (`${keys[i].usChar}`);
+        let buttons = document.querySelectorAll('[class$="button"], [class$="active"]');
+        if (localStorage.getItem("keyboardLang") === "eng") {
+            console.log("test 2");
+            for (let i = 0; i <keys.length; i++) {
+                if (keys[i].className === "button") {
+                    if (upperChar){
+                    buttons[i].innerHTML = (`${keys[i].ruChar.toUpperCase()}`);
+                    }
+                    else {
+                        buttons[i].innerHTML = (`${keys[i].ruChar}`);
+                    }
                 }
             }
+            localStorage.setItem("keyboardLang", "ru");
+            return;
         }
-        localStorage.setItem("keyboardLang", "eng")
-        return;
+
+        if (localStorage.getItem("keyboardLang") === "ru") {
+        
+            for (let i = 0; i <keys.length; i++) {
+                if (keys[i].className === "button") {
+                    if (upperChar){
+                    buttons[i].innerHTML = (`${keys[i].usChar.toUpperCase()}`);
+                    }
+                    else {
+                        buttons[i].innerHTML = (`${keys[i].usChar}`);
+                    }
+                }
+            }
+            localStorage.setItem("keyboardLang", "eng")
+            return;
+        }
     }
-}
 
 class LangKey extends BasicKey {
-    onClick = langFunction;
+     onClick = langFunction; 
 }
 
 const keys = [new BasicKey("`", "ё","button"), new BasicKey("1", "1", "button"), new BasicKey("2", "2", "button"), new BasicKey("3", "3","button"), new BasicKey("4", "4","button"), new BasicKey("5", "5","button"),
@@ -160,15 +160,15 @@ const keys = [new BasicKey("`", "ё","button"), new BasicKey("1", "1", "button")
               new BasicKey("d", "в","button"), new BasicKey("f", "а", "button"), new BasicKey("g", "п", "button"), new BasicKey("h", "р","button"), new BasicKey("j", "о", "button"), new BasicKey("k", "л", "button"),
               new BasicKey("l", "д","button"), new BasicKey(";", "ж", "button"), new BasicKey("'", "э", "button"), new EnterKey("Enter", "Enter","function-button"), new BasicKey("Shift", "Shift","function-button"), new BasicKey("z", "я","button"),
               new BasicKey("x", "ч","button"), new BasicKey("c", "с", "button"), new BasicKey("v", "м", "button"), new BasicKey("b", "и","button"), new BasicKey("n", "т","button"), new BasicKey("m", "ь","button"),
-              new BasicKey(",", "б","button"), new BasicKey(".", "ю", "button"), new BasicKey("/", ".", "button"), new BasicKey("▲", "▲","button"), new BasicKey("Shift", "Shift","function-button"), new BasicKey("Ctr", "Ctr","ctrl-alt-button"), new LangKey("", "","lang-button"),
-              new BasicKey("Alt", "Alt","ctrl-alt-button"), new BasicKey(" ", " ", "space-button"), new BasicKey("Alt", "Alt", "ctrl-alt-button"), new BasicKey("◄", "◄","button"), new BasicKey("▼", "▼","button"), new BasicKey("►", "►","button"), new BasicKey("Ctr", "Ctr","ctrl-alt-button")];
+              new BasicKey(",", "б","button"), new BasicKey(".", "ю", "button"), new BasicKey("/", ".", "button"), new BasicKey("▲", "▲","button"), new BasicKey("Shift", "Shift","function-button"), new BasicKey("Ctr", "Ctr","ctrl-left-button"), new LangKey("", "","lang-button"),
+              new BasicKey("Alt", "Alt","ctrl-alt-button"), new BasicKey(" ", " ", "space-button"), new BasicKey("Alt", "Alt", "ctrl-alt-button"), new BasicKey("◄", "◄","button"), new BasicKey("▼", "▼","button"), new BasicKey("►", "►","button"), new BasicKey("Ctr", "Ctr","ctrl-right-button")];
 
 const keyboard = document.createElement("div");
 const textArea = document.createElement("textarea")
 const body = document.querySelector("body");
 const title = document.createElement("div");
 title.className = "title"
-title.innerHTML = "Для переключения языка используйте кнопку на вируальной клавиатуре, либо левый Ctrl на физической. Многиe функции в процессе разработки и еще не доступны:("
+title.innerHTML = "Для переключения языка используйте кнопку на вируальной клавиатуре или левый Ctrl на физической. Многиe функции в процессе разработки и еще не доступны:("
 
 textArea.className = ("text-area");
 textArea.selectionStart = 0;
@@ -185,25 +185,27 @@ document.addEventListener("keydown", (event) => {
     let arrKey = document.querySelectorAll('[class$="button"], [class$="active"]')
     for (let i = 0; i < arrKey.length; i++) {
         if (event.code === `Key${arrKey[i].getAttribute("data")}`) {
-          
         arrKey[i].classList.add("active")
       }
+      else if (event.code === arrKey[i].getAttribute("data") && event.code == "ControlLeft" && arrKey[i].className == "ctrl-left-button") {
+        arrKey[i].classList.add("active");
+        langFunction();
+      }
+      else if (event.code === arrKey[i].getAttribute("data") && event.code == "ControlRight") {
+        arrKey[i].classList.add("active");
+      }
+      
+
+
       else if (event.code === arrKey[i].getAttribute("data") && event.code == "CapsLock") {
         console.log("test TOGLE");
         arrKey[i].classList.toggle("active");
         capsFunction();
       }
-      else if (event.code === arrKey[i].getAttribute("data") && event.code === "ControlLeft") {
-        langFunction();
-        arrKey[i].classList.add("active");
-        
-      }
       else if (event.code === arrKey[i].getAttribute("data")) {
         
         arrKey[i].classList.add("active");
       }
-
-      
       
     }
    textArea.focus();
@@ -215,7 +217,7 @@ document.addEventListener("keyup", (event) => {
         if (event.code === `Key${arrKey[i].getAttribute("data")}`) {
         arrKey[i].classList.remove("active")
       }
-      else if (event.code === arrKey[i].getAttribute("data") && event.code != "CapsLock") {
+      else if (event.code === arrKey[i].getAttribute("data") && event.code != "CapsLock" ) {
         console.log("TEST2");
         arrKey[i].classList.remove("active");
       }
@@ -227,12 +229,11 @@ if (localStorage.getItem("keyboardLang") === null) {
     localStorage.setItem("keyboardLang", "eng")
 }
 
-if (localStorage.getItem("keyboardLang") === "eng") {
-    textArea.focus();
+
     for (let i = 0; i < keys.length; i++) {
         let button = document.createElement("div");
         button.className = (`${keys[i].className}`);
-        button.innerHTML = (`${keys[i].usChar}`);
+        button.innerHTML = localStorage.getItem("keyboardLang") === "eng" ?  (`${keys[i].usChar}`) : (`${keys[i].ruChar}`)
         keyboard.append(button);
         button.addEventListener("click", () => keys[i].onClick(textArea,  upperChar) );
         if(keys[i].usChar === "Tab") {
@@ -241,121 +242,92 @@ if (localStorage.getItem("keyboardLang") === "eng") {
         else if (keys[i].usChar === "Back") {
             button.setAttribute("data", "Backspace");
         }
-
+    
         else if (keys[i].usChar === "Caps") {
             button.setAttribute("data", "CapsLock");
         }
-
+    
         else if (keys[i].usChar === "Enter") {
             button.setAttribute("data", "Enter");
         }
         else if (keys[i].usChar === "Shift") {
             button.setAttribute("data", "ShiftLeft");
         }
-
-        else if (keys[i].usChar === "Ctr") {
+        else if (keys[i].className === "ctrl-right-button") {
+            console.log(keys[i].className);
+            button.setAttribute("data", "ControlRight");
+        }
+        else if (keys[i].className === "ctrl-left-button") {
             button.setAttribute("data", "ControlLeft");
         }
-
+      
         else if (keys[i].usChar === "Alt") {
             button.setAttribute("data", "AltLeft");
         }
-
+    
         else if (keys[i].usChar === "`") {
             button.setAttribute("data", "Backquote");
         }
-
+    
         else if (keys[i].usChar === "▲") {
             button.setAttribute("data", "ArrowUp");
         }
-
+    
         else if (keys[i].usChar === "◄") {
             button.setAttribute("data", "ArrowLeft");
         }
-
+    
         else if (keys[i].usChar === "►") {
             button.setAttribute("data", "ArrowRight");
         }
-
+    
         else if (keys[i].usChar === "▼") {
             button.setAttribute("data", "ArrowDown");
         }
-
+    
         else if (keys[i].usChar === " ") {
             button.setAttribute("data", "Space");
         }
 
+        else if (keys[i].usChar === "1") {
+            button.setAttribute("data", "Digit1");
+        }
+        else if (keys[i].usChar === "2") {
+            button.setAttribute("data", "Digit2");
+        }
+        else if (keys[i].usChar === "3") {
+            button.setAttribute("data", "Digit3");
+        }
+        else if (keys[i].usChar === "4") {
+            button.setAttribute("data", "Digit4");
+        }
+        else if (keys[i].usChar === "5") {
+            button.setAttribute("data", "Digit5");
+        }
+        else if (keys[i].usChar === "6") {
+            button.setAttribute("data", "Digit6");
+        }
+        else if (keys[i].usChar === "7") {
+            button.setAttribute("data", "Digit7");
+        }
+        else if (keys[i].usChar === "8") {
+            button.setAttribute("data", "Digit8");
+        }
+        else if (keys[i].usChar === "9") {
+            button.setAttribute("data", "Digit9");
+        }
+        else if (keys[i].usChar === "0") {
+            button.setAttribute("data", "Digit0");
+        }
+        else if (keys[i].usChar === "-") {
+            button.setAttribute("data", "Minus");
+        }
+        else if (keys[i].usChar === "=") {
+            button.setAttribute("data", "Equal");
+        }
+    
         else {
             button.setAttribute("data", keys[i].usChar.toUpperCase())
         }
+    }
 
-        keyMap.set(keys[i].keyCode, keys[i]);
-    };
-};
-
-if (localStorage.getItem("keyboardLang") === "ru") {
-    textArea.focus();
-    for (let i = 0; i < keys.length; i++) {
-        let button = document.createElement("div");
-        button.className = (`${keys[i].className}`);
-        button.innerHTML = (`${keys[i].ruChar}`);
-        button.setAttribute("data", `${keys[i].usChar}`.toUpperCase())
-        keyboard.append(button);
-        button.addEventListener("click", () => keys[i].onClick(textArea, upperChar) );
-        if(keys[i].usChar === "Tab") {
-            button.setAttribute("data", keys[i].usChar);
-        }
-        else if (keys[i].usChar === "Back") {
-            button.setAttribute("data", "Backspace");
-        }
-
-        else if (keys[i].usChar === "Caps") {
-            button.setAttribute("data", "CapsLock");
-        }
-
-        else if (keys[i].usChar === "Enter") {
-            button.setAttribute("data", "Enter");
-        }
-        else if (keys[i].usChar === "Shift") {
-            button.setAttribute("data", "ShiftLeft");
-        }
-
-        else if (keys[i].usChar === "Ctr") {
-            button.setAttribute("data", "ControlLeft");
-        }
-
-        else if (keys[i].usChar === "Alt") {
-            button.setAttribute("data", "AltLeft");
-        }
-
-        else if (keys[i].usChar === "`") {
-            button.setAttribute("data", "Backquote");
-        }
-
-        else if (keys[i].usChar === "▲") {
-            button.setAttribute("data", "ArrowUp");
-        }
-
-        else if (keys[i].usChar === "◄") {
-            button.setAttribute("data", "ArrowLeft");
-        }
-
-        else if (keys[i].usChar === "►") {
-            button.setAttribute("data", "ArrowRight");
-        }
-
-        else if (keys[i].usChar === "▼") {
-            button.setAttribute("data", "ArrowDown");
-        }
-
-        else if (keys[i].usChar === " ") {
-            button.setAttribute("data", "Space");
-        }
-
-        else {
-            button.setAttribute("data", keys[i].usChar.toUpperCase())
-        }
-
-        keyMap.set(keys[i].keyCode, keys[i]);
-    };
-};
