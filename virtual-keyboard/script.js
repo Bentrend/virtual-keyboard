@@ -110,7 +110,7 @@ class TabKey extends BasicKey {
 class LangKey extends BasicKey {
     onClick = function () {
         let buttons = document.querySelectorAll('[class$="button"]');
-        if (localStorage['keyboardLang'] === "eng") {
+        if (localStorage.getItem("keyboardLang") === "eng") {
     
             for (let i = 0; i <keys.length; i++) {
                 if (keys[i].className === "button") {
@@ -122,11 +122,11 @@ class LangKey extends BasicKey {
                     }
                 }
             }
-            localStorage['keyboardLang'] = "ru";
+            localStorage.setItem("keyboardLang", "ru");
             return;
         }
 
-        if (localStorage['keyboardLang'] === "ru") {
+        if (localStorage.getItem("keyboardLang") === "ru") {
         
             for (let i = 0; i <keys.length; i++) {
                 if (keys[i].className === "button") {
@@ -138,7 +138,7 @@ class LangKey extends BasicKey {
                     }
                 }
             }
-            localStorage['keyboardLang'] = "eng";
+            localStorage.setItem("keyboardLang", "eng")
             return;
         }
     }
@@ -176,9 +176,11 @@ document.addEventListener("keyup", (event) => {
    
 })
 
+if (localStorage.getItem("keyboardLang") === null) {
+    localStorage.setItem("keyboardLang", "eng")
+}
 
-
-if (localStorage['keyboardLang'] === "eng") {
+if (localStorage.getItem("keyboardLang") === "eng") {
     textArea.focus();
     for (let i = 0; i < keys.length; i++) {
         let button = document.createElement("div");
@@ -191,7 +193,7 @@ if (localStorage['keyboardLang'] === "eng") {
     };
 };
 
-if (localStorage['keyboardLang'] === "ru") {
+if (localStorage.getItem("keyboardLang") === "ru") {
     textArea.focus();
     for (let i = 0; i < keys.length; i++) {
         let button = document.createElement("div");
