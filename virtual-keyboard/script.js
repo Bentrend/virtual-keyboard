@@ -90,8 +90,12 @@ class DelKey extends BasicKey {
 }
 class EnterKey extends BasicKey {
     onClick = function (textArea) {
+        let position = textArea.selectionStart;
         textArea.value = textArea.value.slice(0, textArea.selectionStart) + "\n" + textArea.value.slice(textArea.selectionEnd) ;
-        textArea.selectionStart = textArea.value.length;
+        position++;
+        console.log(textArea.selectionStart);
+        console.log(textArea.selectionEnd);
+        textArea.selectionEnd = position;
         textArea.focus();
     }
 }
