@@ -20,50 +20,52 @@ constructor (usChar, ruChar, className, keyCode) {
         //Event.preventDefault();
     }
 };
+let capsFunction = function () {
+    let capsButton = document.querySelector(".caps-button");
+    let arrButton = document.querySelectorAll(".button");
 
+    if (upperChar == false) {
+        for (let i = 0; i < arrButton.length; i++) {
+            arrButton[i].innerHTML = arrButton[i].innerHTML.toUpperCase();
+        };
+        upperChar = true;
+        capsButton.classList.add("caps-active-button");
+    
+    }  
+    else {
+        for (let i = 0; i < arrButton.length; i++) {
+            arrButton[i].innerHTML = arrButton[i].innerHTML.toLowerCase();
+        };
+        capsButton.classList.remove("caps-active-button"); 
+        upperChar = false;
+    }    
+};
 class CapsKey extends BasicKey  {
-    onClick = function () {
-        let capsButton = document.querySelector(".caps-button");
-        let arrButton = document.querySelectorAll(".button");
-
-        if (upperChar == false) {
-            for (let i = 0; i < arrButton.length; i++) {
-                arrButton[i].innerHTML = arrButton[i].innerHTML.toUpperCase();
-            };
-            upperChar = true;
-            capsButton.classList.add("caps-active-button");
-        
-        }  
-        else {
-            for (let i = 0; i < arrButton.length; i++) {
-                arrButton[i].innerHTML = arrButton[i].innerHTML.toLowerCase();
-            };
-            capsButton.classList.remove("caps-active-button"); 
-            upperChar = false;
-        }    
-    };
+    onClick = capsFunction;
 };
 
+let backSpaceFunction = function (textArea) {
+    let position = textArea.selectionStart;
+        if (textArea.value.length == 0) {
+            return;
+        }; 
+        if (textArea.selectionStart == textArea.selectionEnd && textArea.selectionStart != 0) {
+            textArea.value = textArea.value.slice(0, textArea.selectionStart-1) + textArea.value.slice(textArea.selectionStart);
+            textArea.selectionEnd = position-1;
+            textArea.focus();
+            return;
+        }
+        else {
+            textArea.value = textArea.value.slice(0, textArea.selectionStart) + textArea.value.slice(textArea.selectionEnd);
+            console.log(position);
+            textArea.selectionEnd = position;
+            textArea.focus();
+            return;
+        }
+    }      
+
 class BackspaceKey extends BasicKey {  
-    onClick = function (textArea) {
-        let position = textArea.selectionStart;
-            if (textArea.value.length == 0) {
-                return;
-            }; 
-            if (textArea.selectionStart == textArea.selectionEnd && textArea.selectionStart != 0) {
-                textArea.value = textArea.value.slice(0, textArea.selectionStart-1) + textArea.value.slice(textArea.selectionStart);
-                textArea.selectionEnd = position-1;
-                textArea.focus();
-                return;
-            }
-            else {
-                textArea.value = textArea.value.slice(0, textArea.selectionStart) + textArea.value.slice(textArea.selectionEnd);
-                console.log(position);
-                textArea.selectionEnd = position;
-                textArea.focus();
-                return;
-            }
-        }      
+    onClick = backSpaceFunction;
     }
 
 class DelKey extends BasicKey {
@@ -111,41 +113,43 @@ class TabKey extends BasicKey {
     }
 }
 
-class LangKey extends BasicKey {
-    onClick = function () {
-        let buttons = document.querySelectorAll('[class$="button"]');
-        if (localStorage.getItem("keyboardLang") === "eng") {
-    
-            for (let i = 0; i <keys.length; i++) {
-                if (keys[i].className === "button") {
-                    if (upperChar){
-                    buttons[i].innerHTML = (`${keys[i].ruChar.toUpperCase()}`);
-                    }
-                    else {
-                        buttons[i].innerHTML = (`${keys[i].ruChar}`);
-                    }
-                }
-            }
-            localStorage.setItem("keyboardLang", "ru");
-            return;
-        }
+let langFunction = function () {
+    let buttons = document.querySelectorAll('[class$="button"]');
+    if (localStorage.getItem("keyboardLang") === "eng") {
 
-        if (localStorage.getItem("keyboardLang") === "ru") {
-        
-            for (let i = 0; i <keys.length; i++) {
-                if (keys[i].className === "button") {
-                    if (upperChar){
-                    buttons[i].innerHTML = (`${keys[i].usChar.toUpperCase()}`);
-                    }
-                    else {
-                        buttons[i].innerHTML = (`${keys[i].usChar}`);
-                    }
+        for (let i = 0; i <keys.length; i++) {
+            if (keys[i].className === "button") {
+                if (upperChar){
+                buttons[i].innerHTML = (`${keys[i].ruChar.toUpperCase()}`);
+                }
+                else {
+                    buttons[i].innerHTML = (`${keys[i].ruChar}`);
                 }
             }
-            localStorage.setItem("keyboardLang", "eng")
-            return;
         }
+        localStorage.setItem("keyboardLang", "ru");
+        return;
     }
+
+    if (localStorage.getItem("keyboardLang") === "ru") {
+    
+        for (let i = 0; i <keys.length; i++) {
+            if (keys[i].className === "button") {
+                if (upperChar){
+                buttons[i].innerHTML = (`${keys[i].usChar.toUpperCase()}`);
+                }
+                else {
+                    buttons[i].innerHTML = (`${keys[i].usChar}`);
+                }
+            }
+        }
+        localStorage.setItem("keyboardLang", "eng")
+        return;
+    }
+}
+
+class LangKey extends BasicKey {
+    onClick = langFunction;
 }
 
 const keys = [new BasicKey("`", "ё","button"), new BasicKey("1", "1", "button"), new BasicKey("2", "2", "button"), new BasicKey("3", "3","button"), new BasicKey("4", "4","button"), new BasicKey("5", "5","button"),
@@ -164,7 +168,7 @@ const textArea = document.createElement("textarea")
 const body = document.querySelector("body");
 const title = document.createElement("div");
 title.className = "title"
-title.innerHTML = "Для переключения языка используйте только кнопку на вируальной клавиатуре. Многиe функции в процессе разработки и еще не доступны:("
+title.innerHTML = "Для переключения языка используйте кнопку на вируальной клавиатуре, либо левый Ctrl на физической. Многиe функции в процессе разработки и еще не доступны:("
 
 textArea.className = ("text-area");
 textArea.selectionStart = 0;
@@ -178,34 +182,41 @@ body.append(title);
 
 document.addEventListener("keydown", (event) => {
     console.log(event.code);
-    let arrKey = document.querySelectorAll('[class$="button"]')
-    //console.log(arrKey);
+    let arrKey = document.querySelectorAll('[class$="button"], [class$="active"]')
     for (let i = 0; i < arrKey.length; i++) {
-        console.log(event.code === arrKey[i].getAttribute("data"));
         if (event.code === `Key${arrKey[i].getAttribute("data")}`) {
           
         arrKey[i].classList.add("active")
       }
+      else if (event.code === arrKey[i].getAttribute("data") && event.code == "CapsLock") {
+        console.log("test TOGLE");
+        arrKey[i].classList.toggle("active");
+        capsFunction();
+      }
+      else if (event.code === arrKey[i].getAttribute("data") && event.code === "ControlLeft") {
+        langFunction();
+        arrKey[i].classList.add("active");
+        
+      }
       else if (event.code === arrKey[i].getAttribute("data")) {
-        console.log("test");
+        
         arrKey[i].classList.add("active");
       }
+
+      
+      
     }
    textArea.focus();
 });
 
 document.addEventListener("keyup", (event) => {
-    console.log(event.code);
     let arrKey = document.querySelectorAll('[class$="button active"]')
-    //console.log(arrKey);
     for (let i = 0; i < arrKey.length; i++) {
-        console.log(event.code === arrKey[i].getAttribute("data"));
         if (event.code === `Key${arrKey[i].getAttribute("data")}`) {
-          
         arrKey[i].classList.remove("active")
       }
-      else if (event.code === arrKey[i].getAttribute("data")) {
-        console.log("test");
+      else if (event.code === arrKey[i].getAttribute("data") && event.code != "CapsLock") {
+        console.log("TEST2");
         arrKey[i].classList.remove("active");
       }
     }
