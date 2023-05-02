@@ -1,4 +1,4 @@
-localStorage['keyboardLang'];
+localStorage['keyboardLang'] = "eng";
 let upperChar = false;
 let keyMap = new Map();
 
