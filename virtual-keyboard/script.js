@@ -169,20 +169,48 @@ title.innerHTML = "Для переключения языка используй
 textArea.className = ("text-area");
 textArea.selectionStart = 0;
 textArea.focus();
+body.className = ("body");
 body.append(textArea);
 
 keyboard.className = ("keyboard");
 body.append(keyboard);
 body.append(title);
 
-document.addEventListener("keyup", (event) => {
-
-   
-   let pressKey = keyMap.get(event.code);
+document.addEventListener("keydown", (event) => {
+    console.log(event.code);
+    let arrKey = document.querySelectorAll('[class$="button"]')
+    //console.log(arrKey);
+    for (let i = 0; i < arrKey.length; i++) {
+        console.log(event.code === arrKey[i].getAttribute("data"));
+        if (event.code === `Key${arrKey[i].getAttribute("data")}`) {
+          
+        arrKey[i].classList.add("active")
+      }
+      else if (event.code === arrKey[i].getAttribute("data")) {
+        console.log("test");
+        arrKey[i].classList.add("active");
+      }
+    }
    textArea.focus();
-   //pressKey.onClick(textArea, keyboardLang, upperChar);
-   
-})
+});
+
+document.addEventListener("keyup", (event) => {
+    console.log(event.code);
+    let arrKey = document.querySelectorAll('[class$="button active"]')
+    //console.log(arrKey);
+    for (let i = 0; i < arrKey.length; i++) {
+        console.log(event.code === arrKey[i].getAttribute("data"));
+        if (event.code === `Key${arrKey[i].getAttribute("data")}`) {
+          
+        arrKey[i].classList.remove("active")
+      }
+      else if (event.code === arrKey[i].getAttribute("data")) {
+        console.log("test");
+        arrKey[i].classList.remove("active");
+      }
+    }
+   textArea.focus();
+});
 
 if (localStorage.getItem("keyboardLang") === null) {
     localStorage.setItem("keyboardLang", "eng")
@@ -196,7 +224,60 @@ if (localStorage.getItem("keyboardLang") === "eng") {
         button.innerHTML = (`${keys[i].usChar}`);
         keyboard.append(button);
         button.addEventListener("click", () => keys[i].onClick(textArea,  upperChar) );
-        
+        if(keys[i].usChar === "Tab") {
+            button.setAttribute("data", keys[i].usChar);
+        }
+        else if (keys[i].usChar === "Back") {
+            button.setAttribute("data", "Backspace");
+        }
+
+        else if (keys[i].usChar === "Caps") {
+            button.setAttribute("data", "CapsLock");
+        }
+
+        else if (keys[i].usChar === "Enter") {
+            button.setAttribute("data", "Enter");
+        }
+        else if (keys[i].usChar === "Shift") {
+            button.setAttribute("data", "ShiftLeft");
+        }
+
+        else if (keys[i].usChar === "Ctr") {
+            button.setAttribute("data", "ControlLeft");
+        }
+
+        else if (keys[i].usChar === "Alt") {
+            button.setAttribute("data", "AltLeft");
+        }
+
+        else if (keys[i].usChar === "`") {
+            button.setAttribute("data", "Backquote");
+        }
+
+        else if (keys[i].usChar === "▲") {
+            button.setAttribute("data", "ArrowUp");
+        }
+
+        else if (keys[i].usChar === "◄") {
+            button.setAttribute("data", "ArrowLeft");
+        }
+
+        else if (keys[i].usChar === "►") {
+            button.setAttribute("data", "ArrowRight");
+        }
+
+        else if (keys[i].usChar === "▼") {
+            button.setAttribute("data", "ArrowDown");
+        }
+
+        else if (keys[i].usChar === " ") {
+            button.setAttribute("data", "Space");
+        }
+
+        else {
+            button.setAttribute("data", keys[i].usChar.toUpperCase())
+        }
+
         keyMap.set(keys[i].keyCode, keys[i]);
     };
 };
@@ -207,9 +288,63 @@ if (localStorage.getItem("keyboardLang") === "ru") {
         let button = document.createElement("div");
         button.className = (`${keys[i].className}`);
         button.innerHTML = (`${keys[i].ruChar}`);
+        button.setAttribute("data", `${keys[i].usChar}`.toUpperCase())
         keyboard.append(button);
         button.addEventListener("click", () => keys[i].onClick(textArea, upperChar) );
-    
+        if(keys[i].usChar === "Tab") {
+            button.setAttribute("data", keys[i].usChar);
+        }
+        else if (keys[i].usChar === "Back") {
+            button.setAttribute("data", "Backspace");
+        }
+
+        else if (keys[i].usChar === "Caps") {
+            button.setAttribute("data", "CapsLock");
+        }
+
+        else if (keys[i].usChar === "Enter") {
+            button.setAttribute("data", "Enter");
+        }
+        else if (keys[i].usChar === "Shift") {
+            button.setAttribute("data", "ShiftLeft");
+        }
+
+        else if (keys[i].usChar === "Ctr") {
+            button.setAttribute("data", "ControlLeft");
+        }
+
+        else if (keys[i].usChar === "Alt") {
+            button.setAttribute("data", "AltLeft");
+        }
+
+        else if (keys[i].usChar === "`") {
+            button.setAttribute("data", "Backquote");
+        }
+
+        else if (keys[i].usChar === "▲") {
+            button.setAttribute("data", "ArrowUp");
+        }
+
+        else if (keys[i].usChar === "◄") {
+            button.setAttribute("data", "ArrowLeft");
+        }
+
+        else if (keys[i].usChar === "►") {
+            button.setAttribute("data", "ArrowRight");
+        }
+
+        else if (keys[i].usChar === "▼") {
+            button.setAttribute("data", "ArrowDown");
+        }
+
+        else if (keys[i].usChar === " ") {
+            button.setAttribute("data", "Space");
+        }
+
+        else {
+            button.setAttribute("data", keys[i].usChar.toUpperCase())
+        }
+
         keyMap.set(keys[i].keyCode, keys[i]);
     };
 };
