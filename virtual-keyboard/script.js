@@ -94,7 +94,7 @@ class ControlAltKey extends BasicKey {
   onClick = function() {
     textArea.focus();
     return;
-  }
+  };
 }
 class EnterKey extends BasicKey {
   onClick = function(textArea) {
@@ -107,16 +107,16 @@ class EnterKey extends BasicKey {
     textArea.focus();
   };
 }
-let tabFunction = function (textArea) {
+const tabFunction = function(textArea) {
   let position = textArea.selectionStart;
-    textArea.value =
+  textArea.value =
     textArea.value.slice(0, textArea.selectionStart) + '    ' +
     textArea.value.slice(textArea.selectionEnd);
-    position+=4;
-    textArea.selectionEnd = position;
-    textArea.selectionStart = position;
-    textArea.focus();
-}
+  position+=4;
+  textArea.selectionEnd = position;
+  textArea.selectionStart = position;
+  textArea.focus();
+};
 class TabKey extends BasicKey {
   onClick = tabFunction;
 }
@@ -232,7 +232,7 @@ keyboard.className = ('keyboard');
 body.append(keyboard);
 body.append(title);
 document.addEventListener('keydown', (event) => {
-  let arrKey = 
+  const arrKey =
   document.querySelectorAll('[class$="button"], [class$="active"]');
   for (let i = 0; i < arrKey.length; i++) {
     if (event.code === `Key${arrKey[i].getAttribute('data')}`) {
@@ -252,15 +252,14 @@ document.addEventListener('keydown', (event) => {
     'CapsLock') {
       arrKey[i].classList.toggle('active');
       capsFunction();
-    } else if (event.code === arrKey[i].getAttribute('data') && event.code == "Tab") {
+    } else if (event.code === arrKey[i].getAttribute('data') && event.code == 'Tab') {
       event.preventDefault();
       tabFunction(textArea);
       arrKey[i].classList.add('active');
-    } else if (event.code === arrKey[i].getAttribute('data') && event.code == "AltLeft") {
+    } else if (event.code === arrKey[i].getAttribute('data') && event.code == 'AltLeft') {
       event.preventDefault();
       arrKey[i].classList.add('active');
-    }
-      else if (event.code === arrKey[i].getAttribute('data')) {
+    } else if (event.code === arrKey[i].getAttribute('data')) {
       arrKey[i].classList.add('active');
     }
   }
@@ -362,13 +361,13 @@ for (let i = 0; i < keys.length; i++) {
     button.setAttribute('data', 'Backslash');
   } else if (keys[i].usChar === ';') {
     button.setAttribute('data', 'Semicolon');
-  } else if (keys[i].usChar === "'") {
+  } else if (keys[i].usChar === '\'') {
     button.setAttribute('data', 'Quote');
-  } else if (keys[i].usChar === ",") {
+  } else if (keys[i].usChar === ',') {
     button.setAttribute('data', 'Comma');
-  } else if (keys[i].usChar === ".") {
+  } else if (keys[i].usChar === '.') {
     button.setAttribute('data', 'Period');
-  } else if (keys[i].usChar === "/") {
+  } else if (keys[i].usChar === '/') {
     button.setAttribute('data', 'Slash');
   } else {
     button.setAttribute('data', keys[i].usChar.toUpperCase());
