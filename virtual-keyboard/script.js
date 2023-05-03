@@ -250,7 +250,11 @@ document.addEventListener('keydown', (event) => {
       event.preventDefault();
       tabFunction(textArea);
       arrKey[i].classList.add('active');
-    } else if (event.code === arrKey[i].getAttribute('data')) {
+    } else if (event.code === arrKey[i].getAttribute('data') && event.code == "AltLeft") {
+      event.preventDefault();
+      arrKey[i].classList.add('active');
+    }
+      else if (event.code === arrKey[i].getAttribute('data')) {
       arrKey[i].classList.add('active');
     }
   }
