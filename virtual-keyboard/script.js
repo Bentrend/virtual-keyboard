@@ -90,6 +90,12 @@ class DelKey extends BasicKey {
     }
   };
 }
+class ControlAltKey extends BasicKey {
+  onClick = function() {
+    textArea.focus();
+    return;
+  }
+}
 class EnterKey extends BasicKey {
   onClick = function(textArea) {
     let position = textArea.selectionStart;
@@ -101,9 +107,8 @@ class EnterKey extends BasicKey {
     textArea.focus();
   };
 }
-class TabKey extends BasicKey {
-  onClick(textArea) {
-    let position = textArea.selectionStart;
+let tabFunction = function (textArea) {
+  let position = textArea.selectionStart;
     textArea.value =
     textArea.value.slice(0, textArea.selectionStart) + '    ' +
     textArea.value.slice(textArea.selectionEnd);
@@ -111,7 +116,9 @@ class TabKey extends BasicKey {
     textArea.selectionEnd = position;
     textArea.selectionStart = position;
     textArea.focus();
-  }
+}
+class TabKey extends BasicKey {
+  onClick = tabFunction;
 }
 const langFunction = function() {
   const buttons =
@@ -188,7 +195,7 @@ const keys =
   new BasicKey(';', 'ж', 'button'),
   new BasicKey('\'', 'э', 'button'),
   new EnterKey('Enter', 'Enter', 'function-button'),
-  new BasicKey('Shift', 'Shift', 'function-button'),
+  new ControlAltKey('Shift', 'Shift', 'function-button'),
   new BasicKey('z', 'я', 'button'),
   new BasicKey('x', 'ч', 'button'),
   new BasicKey('c', 'с', 'button'),
@@ -200,16 +207,16 @@ const keys =
   new BasicKey('.', 'ю', 'button'),
   new BasicKey('/', '.', 'button'),
   new BasicKey('▲', '▲', 'button'),
-  new BasicKey('Shift', 'Shift', 'function-button'),
-  new BasicKey('Ctr', 'Ctr', 'ctrl-left-button'),
+  new ControlAltKey('Shift', 'Shift', 'function-button'),
+  new ControlAltKey('Ctr', 'Ctr', 'ctrl-left-button'),
   new LangKey('', '', 'lang-button'),
-  new BasicKey('Alt', 'Alt', 'ctrl-alt-button'),
+  new ControlAltKey('Alt', 'Alt', 'ctrl-alt-button'),
   new BasicKey(' ', ' ', 'space-button'),
-  new BasicKey('Alt', 'Alt', 'ctrl-alt-button'),
+  new ControlAltKey('Alt', 'Alt', 'ctrl-alt-button'),
   new BasicKey('◄', '◄', 'button'),
   new BasicKey('▼', '▼', 'button'),
   new BasicKey('►', '►', 'button'),
-  new BasicKey('Ctr', 'Ctr', 'ctrl-right-button')];
+  new ControlAltKey('Ctr', 'Ctr', 'ctrl-right-button')];
 const keyboard = document.createElement('div');
 const textArea = document.createElement('textarea');
 const body = document.querySelector('body');
@@ -245,7 +252,15 @@ document.addEventListener('keydown', (event) => {
     'CapsLock') {
       arrKey[i].classList.toggle('active');
       capsFunction();
-    } else if (event.code === arrKey[i].getAttribute('data')) {
+    } else if (event.code === arrKey[i].getAttribute('data') && event.code == "Tab") {
+      event.preventDefault();
+      tabFunction(textArea);
+      arrKey[i].classList.add('active');
+    } else if (event.code === arrKey[i].getAttribute('data') && event.code == "AltLeft") {
+      event.preventDefault();
+      arrKey[i].classList.add('active');
+    }
+      else if (event.code === arrKey[i].getAttribute('data')) {
       arrKey[i].classList.add('active');
     }
   }
