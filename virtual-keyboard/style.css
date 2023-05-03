@@ -148,7 +148,7 @@
 
 .active {
     background-color: rgba(253, 114, 0, 0.541);
-    transform: scale(1);
+    transform: scale(0.95);
 }
 .text-area:focus {
     outline-style: none;
