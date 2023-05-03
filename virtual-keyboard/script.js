@@ -168,7 +168,7 @@ const textArea = document.createElement("textarea")
 const body = document.querySelector("body");
 const title = document.createElement("div");
 title.className = "title"
-title.innerHTML = "Для переключения языка используйте кнопку на вируальной клавиатуре или левый Ctrl на физической. Многиe функции в процессе разработки и еще не доступны:("
+title.innerHTML = "Для переключения языка используйте кнопку на вируальной клавиатуре или зажмите <b>левый Ctrl</b> и кратковременно нажмите <b>левый Alt</b> на физической. К сожалению кнопки SHIFT не работают("
 
 textArea.className = ("text-area");
 textArea.selectionStart = 0;
@@ -181,7 +181,7 @@ body.append(keyboard);
 body.append(title);
 
 document.addEventListener("keydown", (event) => {
-    console.log(event.code);
+
     let arrKey = document.querySelectorAll('[class$="button"], [class$="active"]')
     for (let i = 0; i < arrKey.length; i++) {
         if (event.code === `Key${arrKey[i].getAttribute("data")}`) {
@@ -189,14 +189,19 @@ document.addEventListener("keydown", (event) => {
       }
       else if (event.code === arrKey[i].getAttribute("data") && event.code == "ControlLeft" && arrKey[i].className == "ctrl-left-button") {
         arrKey[i].classList.add("active");
-        langFunction();
-      }
+        document.addEventListener("keydown", (event2) => {
+            if ( event2.code == "AltLeft"){
+                console.log(event.code);
+                langFunction();
+                arrKey[i].classList.add("active");
+            }
+        })
+    }
+
       else if (event.code === arrKey[i].getAttribute("data") && event.code == "ControlRight") {
         arrKey[i].classList.add("active");
       }
       
-
-
       else if (event.code === arrKey[i].getAttribute("data") && event.code == "CapsLock") {
         console.log("test TOGLE");
         arrKey[i].classList.toggle("active");
