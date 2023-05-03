@@ -90,6 +90,12 @@ class DelKey extends BasicKey {
     }
   };
 }
+class ControlAltKey extends BasicKey {
+  onClick = function() {
+    textArea.focus();
+    return;
+  }
+}
 class EnterKey extends BasicKey {
   onClick = function(textArea) {
     let position = textArea.selectionStart;
@@ -189,7 +195,7 @@ const keys =
   new BasicKey(';', 'ж', 'button'),
   new BasicKey('\'', 'э', 'button'),
   new EnterKey('Enter', 'Enter', 'function-button'),
-  new BasicKey('Shift', 'Shift', 'function-button'),
+  new ControlAltKey('Shift', 'Shift', 'function-button'),
   new BasicKey('z', 'я', 'button'),
   new BasicKey('x', 'ч', 'button'),
   new BasicKey('c', 'с', 'button'),
@@ -201,16 +207,16 @@ const keys =
   new BasicKey('.', 'ю', 'button'),
   new BasicKey('/', '.', 'button'),
   new BasicKey('▲', '▲', 'button'),
-  new BasicKey('Shift', 'Shift', 'function-button'),
-  new BasicKey('Ctr', 'Ctr', 'ctrl-left-button'),
+  new ControlAltKey('Shift', 'Shift', 'function-button'),
+  new ControlAltKey('Ctr', 'Ctr', 'ctrl-left-button'),
   new LangKey('', '', 'lang-button'),
-  new BasicKey('Alt', 'Alt', 'ctrl-alt-button'),
+  new ControlAltKey('Alt', 'Alt', 'ctrl-alt-button'),
   new BasicKey(' ', ' ', 'space-button'),
-  new BasicKey('Alt', 'Alt', 'ctrl-alt-button'),
+  new ControlAltKey('Alt', 'Alt', 'ctrl-alt-button'),
   new BasicKey('◄', '◄', 'button'),
   new BasicKey('▼', '▼', 'button'),
   new BasicKey('►', '►', 'button'),
-  new BasicKey('Ctr', 'Ctr', 'ctrl-right-button')];
+  new ControlAltKey('Ctr', 'Ctr', 'ctrl-right-button')];
 const keyboard = document.createElement('div');
 const textArea = document.createElement('textarea');
 const body = document.querySelector('body');
