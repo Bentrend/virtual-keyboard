@@ -101,9 +101,8 @@ class EnterKey extends BasicKey {
     textArea.focus();
   };
 }
-class TabKey extends BasicKey {
-  onClick(textArea) {
-    let position = textArea.selectionStart;
+let tabFunction = function (textArea) {
+  let position = textArea.selectionStart;
     textArea.value =
     textArea.value.slice(0, textArea.selectionStart) + '    ' +
     textArea.value.slice(textArea.selectionEnd);
@@ -111,7 +110,9 @@ class TabKey extends BasicKey {
     textArea.selectionEnd = position;
     textArea.selectionStart = position;
     textArea.focus();
-  }
+}
+class TabKey extends BasicKey {
+  onClick = tabFunction;
 }
 const langFunction = function() {
   const buttons =
@@ -245,6 +246,10 @@ document.addEventListener('keydown', (event) => {
     'CapsLock') {
       arrKey[i].classList.toggle('active');
       capsFunction();
+    } else if (event.code === arrKey[i].getAttribute('data') && event.code == "Tab") {
+      event.preventDefault();
+      tabFunction(textArea);
+      arrKey[i].classList.add('active');
     } else if (event.code === arrKey[i].getAttribute('data')) {
       arrKey[i].classList.add('active');
     }
