@@ -1,6 +1,5 @@
 let upperChar = false;
-let keyMap = new Map();
-
+let arrKeyLang = []; //ДЛИНА МАССИВА ДЛЯ ПОДСЧЕТА НАЖАТЫХ КЛАВИШ ПЕРЕКЛЮЧЕНИЯ ЯЗЫКА
 class BasicKey {
 constructor (usChar, ruChar, className, keyCode) {
     this.usChar = usChar;
@@ -17,7 +16,6 @@ constructor (usChar, ruChar, className, keyCode) {
         textArea.selectionEnd = position;
         textArea.selectionStart = position;
         textArea.focus();
-        //Event.preventDefault();
     }
 };
 let capsFunction = function () {
@@ -116,7 +114,7 @@ class TabKey extends BasicKey {
 let langFunction = function () {
         let buttons = document.querySelectorAll('[class$="button"], [class$="active"]');
         if (localStorage.getItem("keyboardLang") === "eng") {
-            console.log("test 2");
+            
             for (let i = 0; i <keys.length; i++) {
                 if (keys[i].className === "button") {
                     if (upperChar){
@@ -178,40 +176,33 @@ body.append(textArea);
 
 keyboard.className = ("keyboard");
 body.append(keyboard);
-body.append(title);
-
+body.append(title); 
 document.addEventListener("keydown", (event) => {
-
+       
     let arrKey = document.querySelectorAll('[class$="button"], [class$="active"]')
     for (let i = 0; i < arrKey.length; i++) {
         if (event.code === `Key${arrKey[i].getAttribute("data")}`) {
         arrKey[i].classList.add("active")
-      }
-      else if (event.code === arrKey[i].getAttribute("data") && event.code == "ControlLeft" && arrKey[i].className == "ctrl-left-button") {
-        arrKey[i].classList.add("active");
-        document.addEventListener("keydown", (event2) => {
-            if ( event2.code == "AltLeft"){
-                console.log(event.code);
-                langFunction();
+        }
+        else if (event.code === arrKey[i].getAttribute("data") && event.code == "ControlLeft" && arrKey[i].className == "ctrl-left-button") {
+            if (arrKeyLang.length == 0) {
+            arrKeyLang.length++;
+            arrKey[i].classList.add("active");
+            }
+            else {
                 arrKey[i].classList.add("active");
             }
-        })
-    }
-
-      else if (event.code === arrKey[i].getAttribute("data") && event.code == "ControlRight") {
-        arrKey[i].classList.add("active");
-      }
-      
-      else if (event.code === arrKey[i].getAttribute("data") && event.code == "CapsLock") {
-        console.log("test TOGLE");
-        arrKey[i].classList.toggle("active");
-        capsFunction();
-      }
-      else if (event.code === arrKey[i].getAttribute("data")) {
-        
-        arrKey[i].classList.add("active");
-      }
-      
+            }   
+        else if (event.code === arrKey[i].getAttribute("data") && event.code == "ControlRight") {
+            arrKey[i].classList.add("active");
+        }
+        else if (event.code === arrKey[i].getAttribute("data") && event.code == "CapsLock") {
+            arrKey[i].classList.toggle("active");
+            capsFunction();
+        }
+        else if (event.code === arrKey[i].getAttribute("data")) {
+            arrKey[i].classList.add("active");
+        }
     }
    textArea.focus();
 });
@@ -222,6 +213,18 @@ document.addEventListener("keyup", (event) => {
         if (event.code === `Key${arrKey[i].getAttribute("data")}`) {
         arrKey[i].classList.remove("active")
       }
+      else if ( event.code == "AltLeft"){
+        if(arrKeyLang.length = 1){
+        langFunction();
+        arrKey[i].classList.remove("active");
+        arrKeyLang.length = 0;
+        }
+        else if (arrKeyLang.length == 0) {
+            arrKeyLang.length = 1;
+            arrKey[i].classList.remove("active");
+            textArea.focus();
+        }
+    }
       else if (event.code === arrKey[i].getAttribute("data") && event.code != "CapsLock" ) {
         console.log("TEST2");
         arrKey[i].classList.remove("active");
@@ -234,8 +237,7 @@ if (localStorage.getItem("keyboardLang") === null) {
     localStorage.setItem("keyboardLang", "eng")
 }
 
-
-    for (let i = 0; i < keys.length; i++) {
+for (let i = 0; i < keys.length; i++) {
         let button = document.createElement("div");
         button.className = (`${keys[i].className}`);
         button.innerHTML = localStorage.getItem("keyboardLang") === "eng" ?  (`${keys[i].usChar}`) : (`${keys[i].ruChar}`)
