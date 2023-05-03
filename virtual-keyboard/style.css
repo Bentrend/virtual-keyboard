@@ -108,6 +108,8 @@
     cursor: pointer;
     transform: scale(1.01);
 }
+.ctrl-left-button:hover,
+.ctrl-right-button:hover,
 .lang-button:hover,
 .caps-button:hover,
 .dell-button:hover,
@@ -131,6 +133,8 @@
     background-color: rgba(253, 114, 0, 0.541);
     transform: scale(1.1);
 }
+.ctrl-left-button:active,
+.ctrl-right-button:active,
 .tab-button:active,
 .lang-button:active,
 .dell-button:active,
