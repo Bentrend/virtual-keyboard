@@ -124,7 +124,8 @@
 .space-button:hover {
     cursor: pointer;
 }
-.caps-active-button {display: flex;
+.caps-active-button {
+    display: flex;
     justify-content: center;
     align-items: center;
     width: 90px;
